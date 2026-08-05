@@ -195,9 +195,9 @@ Then visit: `http://localhost:8080/FashionStore/admin`
 | Product Detail | ![productDetail](screenshots/detail.png) |
 | Cart | ![Cart](screenshots/cart.png) |
 | Checkout | ![Checkout](screenshots/checkout.png) |
-| Order Tracking | ![Tracking](screenshots/tracking.png) |
+| Order Tracking | ![orderTracking](screenshots/tracking.png) |
 | Wishlist | ![Wishlist](screenshots/wishlist.png) |
-| Admin Dashboard | ![adminDashboard](screenshots/admin.png) |
+| Admin Dashboard | ![AdminDashboard](screenshots/admin.png) |
 | Login | ![Login](screenshots/login.png) |
 | Register | ![Register](screenshots/register.png) |
 
