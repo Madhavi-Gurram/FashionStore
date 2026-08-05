@@ -226,8 +226,8 @@ Then visit: `http://localhost:8080/FashionStore/admin`
 **Madhavi**
 Java Full Stack Trainee | TAP Academy, Bengaluru
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/YOUR_LINKEDIN)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/YOUR_USERNAME)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/madhavi-gurram)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/Madhavi-Gurram)
 
 ---
 
