@@ -1,4 +1,5 @@
 package com.fashionstore.controller;
+import com.fashionstore.daoimpl.WishlistDAOImpl;
 
 import com.fashionstore.daoimpl.CategoryDAOImpl;
 import com.fashionstore.daoimpl.ProductDAOImpl;

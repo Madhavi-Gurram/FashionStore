@@ -5,10 +5,128 @@
          https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
 
-  <display-name>FashionStore</display-name>
+    <display-name>FashionStore</display-name>
 
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
+    <!-- =============================================
+         WELCOME FILE
+         ============================================= -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- =============================================
+         ENCODING FILTER
+         ============================================= -->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.fashionstore.filter.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- =============================================
+         HOME CONTROLLER
+         ============================================= -->
+    <servlet>
+        <servlet-name>HomeController</servlet-name>
+        <servlet-class>com.fashionstore.controller.HomeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeController</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+
+    <!-- =============================================
+         USER CONTROLLER
+         ============================================= -->
+    <servlet>
+        <servlet-name>UserController</servlet-name>
+        <servlet-class>com.fashionstore.controller.UserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/user</url-pattern>
+    </servlet-mapping>
+
+    <!-- =============================================
+         PRODUCT CONTROLLER
+         ============================================= -->
+    <servlet>
+        <servlet-name>ProductController</servlet-name>
+        <servlet-class>com.fashionstore.controller.ProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProductController</servlet-name>
+        <url-pattern>/products</url-pattern>
+    </servlet-mapping>
+
+    <!-- =============================================
+         CART CONTROLLER
+         ============================================= -->
+    <servlet>
+        <servlet-name>CartController</servlet-name>
+        <servlet-class>com.fashionstore.controller.CartController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CartController</servlet-name>
+        <url-pattern>/cart</url-pattern>
+    </servlet-mapping>
+
+    <!-- =============================================
+         ORDER CONTROLLER
+         ============================================= -->
+    <servlet>
+        <servlet-name>OrderController</servlet-name>
+        <servlet-class>com.fashionstore.controller.OrderController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderController</servlet-name>
+        <url-pattern>/orders</url-pattern>
+    </servlet-mapping>
+
+    <!-- =============================================
+         WISHLIST CONTROLLER
+         ============================================= -->
+    <servlet>
+        <servlet-name>WishlistController</servlet-name>
+        <servlet-class>com.fashionstore.controller.WishlistController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WishlistController</servlet-name>
+        <url-pattern>/wishlist</url-pattern>
+    </servlet-mapping>
+
+    <!-- =============================================
+         ADMIN CONTROLLER
+         ============================================= -->
+    <servlet>
+        <servlet-name>AdminController</servlet-name>
+        <servlet-class>com.fashionstore.controller.AdminController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminController</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+
+    <!-- =============================================
+         ERROR PAGES
+         ============================================= -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/error/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+
+    <!-- =============================================
+         SESSION TIMEOUT — 30 minutes
+         ============================================= -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
 
 </web-app>

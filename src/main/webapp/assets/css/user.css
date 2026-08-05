@@ -1,26 +1,30 @@
 /* =============================================
-   USER PAGES - user.css
+   USER PAGES - user.css (Ocean Blue Theme)
    ============================================= */
 
 /* =============================================
    AUTH WRAPPER
    ============================================= */
 .auth-wrapper {
-    min-height: calc(100vh - 140px);
+    min-height: calc(100vh - 70px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
-    background: var(--primary-bg);
+    padding: 16px;
+    background: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 50%, #E0F2FE 100%);
 }
 
+/* =============================================
+   AUTH CARD
+   ============================================= */
 .auth-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    padding: 40px;
     width: 100%;
-    max-width: 460px;
+    max-width: 440px;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px 28px;
+    box-shadow: 0 8px 30px rgba(14,116,144,0.15);
+    border: 1px solid rgba(14,116,144,0.08);
 }
 
 /* =============================================
@@ -28,13 +32,13 @@
    ============================================= */
 .auth-logo {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 6px;
 }
 
 .auth-logo a {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
-    color: var(--text-dark);
+    color: var(--navy);
     text-decoration: none;
 }
 
@@ -46,29 +50,29 @@
    AUTH HEADING
    ============================================= */
 .auth-title {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
-    color: var(--text-dark);
+    color: var(--navy);
     text-align: center;
-    margin-bottom: 6px;
+    margin-bottom: 2px;
 }
 
 .auth-subtitle {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-light);
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 12px;
 }
 
 /* =============================================
-   ALERT MESSAGES
+   ALERTS
    ============================================= */
 .alert {
-    padding: 12px 16px;
+    padding: 8px 12px;
     border-radius: var(--radius-sm);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .alert-error {
@@ -95,28 +99,30 @@
 .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
     gap: 6px;
 }
 
-.form-group label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-medium);
+.auth-form .form-group {
+    margin-bottom: 4px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
-    padding: 11px 14px;
+.auth-form .form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 2px !important;
+}
+
+.auth-form .form-group input,
+.auth-form .form-group textarea,
+.auth-form .form-group select {
+    padding: 8px 12px !important;
+    font-size: 13px;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
-    font-size: 14px;
     font-family: 'Poppins', sans-serif;
     color: var(--text-dark);
     background: var(--white);
@@ -124,18 +130,30 @@
     transition: border 0.2s, box-shadow 0.2s;
     width: 100%;
     box-sizing: border-box;
+    margin: 0 !important;
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.auth-form .form-group input:focus,
+.auth-form .form-group textarea:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+    box-shadow: 0 0 0 3px rgba(14,116,144,0.08);
 }
 
-.form-group textarea {
+.auth-form .form-group textarea {
+    height: 60px;
+    min-height: 60px;
     resize: vertical;
-    min-height: 90px;
+}
+
+/* =============================================
+   FIELD ERROR
+   ============================================= */
+.field-error {
+    font-size: 10px;
+    color: var(--error);
+    min-height: 12px;
+    display: block;
+    line-height: 1.2;
 }
 
 /* =============================================
@@ -148,19 +166,19 @@
 }
 
 .input-password-wrap input {
-    padding-right: 46px;
+    padding-right: 40px !important;
 }
 
 .toggle-password {
     position: absolute;
-    right: 12px;
+    right: 10px;
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 16px;
-    padding: 0;
+    font-size: 14px;
     color: var(--text-light);
     transition: color 0.2s;
+    padding: 0;
 }
 
 .toggle-password:hover {
@@ -168,48 +186,79 @@
 }
 
 /* =============================================
+   PASSWORD STRENGTH
+   ============================================= */
+.password-strength {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 3px;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+.strength-label {
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* =============================================
    AUTH BUTTONS
    ============================================= */
 .btn-auth {
     width: 100%;
-    padding: 13px;
-    background: var(--primary);
-    color: var(--white);
+    padding: 10px;
+    margin-top: 8px;
     border: none;
-    border-radius: var(--radius-lg);
-    font-size: 15px;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    margin-top: 6px;
-}
-
-.btn-auth:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-}
-
-.btn-auth-outline {
-    display: block;
-    width: 100%;
-    padding: 13px;
-    background: var(--white);
-    color: var(--primary);
-    border: 2px solid var(--primary);
-    border-radius: var(--radius-lg);
+    border-radius: 10px;
+    background: var(--navy);
+    color: var(--white);
     font-size: 14px;
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s;
+}
+
+.btn-auth:hover {
+    background: var(--primary);
+    transform: translateY(-1px);
+}
+
+.btn-auth-outline {
+    width: 100%;
+    display: block;
     text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--navy);
     text-decoration: none;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.25s;
+    margin-top: 4px;
     box-sizing: border-box;
 }
 
 .btn-auth-outline:hover {
-    background: var(--primary);
+    background: var(--navy);
     color: var(--white);
 }
 
@@ -217,9 +266,9 @@
    DIVIDER
    ============================================= */
 .auth-divider {
-    text-align: center;
-    margin: 20px 0 14px;
     position: relative;
+    text-align: center;
+    margin: 10px 0 6px;
 }
 
 .auth-divider::before {
@@ -233,11 +282,11 @@
 }
 
 .auth-divider span {
-    background: var(--white);
-    padding: 0 12px;
-    font-size: 12px;
-    color: var(--text-light);
     position: relative;
+    background: var(--white);
+    padding: 0 10px;
+    font-size: 11px;
+    color: var(--text-light);
 }
 
 /* =============================================
@@ -245,8 +294,8 @@
    ============================================= */
 .profile-wrapper {
     max-width: 800px;
-    margin: 40px auto;
-    padding: 0 20px 60px;
+    margin: 24px auto;
+    padding: 0 16px 40px;
 }
 
 /* =============================================
@@ -255,42 +304,42 @@
 .profile-header {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 16px;
     background: var(--white);
-    border-radius: var(--radius-lg);
+    border-radius: 16px;
     box-shadow: var(--shadow-sm);
-    padding: 28px 32px;
-    margin-bottom: 24px;
+    padding: 20px 24px;
+    margin-bottom: 18px;
     flex-wrap: wrap;
+    border: 1px solid var(--border);
 }
 
 .profile-avatar {
-    width: 72px;
-    height: 72px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     background: var(--primary-bg);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    font-size: 28px;
     flex-shrink: 0;
     border: 3px solid var(--primary);
 }
 
 .profile-info {
     flex: 1;
-    min-width: 0;
 }
 
 .profile-info h2 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 4px;
+    color: var(--navy);
+    margin-bottom: 3px;
 }
 
 .profile-info p {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-light);
     margin-bottom: 2px;
 }
@@ -300,19 +349,19 @@
    ============================================= */
 .profile-header-actions {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     flex-wrap: wrap;
-    align-items: center;
     margin-left: auto;
+    align-items: center;
 }
 
 /* =============================================
    PROFILE LINK BUTTONS
    ============================================= */
 .profile-link-btn {
-    padding: 10px 20px;
-    border-radius: var(--radius-lg);
-    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 12px;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.2s;
@@ -321,9 +370,7 @@
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    line-height: 1.4;
-    box-sizing: border-box;
+    gap: 4px;
 }
 
 .profile-link-btn:hover {
@@ -348,18 +395,19 @@
    ============================================= */
 .profile-card {
     background: var(--white);
-    border-radius: var(--radius-lg);
+    border-radius: 16px;
     box-shadow: var(--shadow-sm);
-    padding: 32px;
-    margin-bottom: 24px;
+    padding: 24px;
+    margin-bottom: 18px;
+    border: 1px solid var(--border);
 }
 
 .profile-card h3 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 24px;
-    padding-bottom: 12px;
+    color: var(--navy);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--border);
 }
 
@@ -369,32 +417,32 @@
 .profile-form {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
 }
 
 .profile-form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 14px;
 }
 
 .btn-profile-save {
-    padding: 12px 32px;
-    background: var(--primary);
+    padding: 10px 24px;
+    background: var(--navy);
     color: var(--white);
     border: none;
-    border-radius: var(--radius-lg);
-    font-size: 14px;
+    border-radius: 10px;
+    font-size: 13px;
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+    transition: all 0.2s;
     align-self: flex-start;
-    margin-top: 8px;
+    margin-top: 4px;
 }
 
 .btn-profile-save:hover {
-    background: var(--primary-dark);
+    background: var(--primary);
     transform: translateY(-1px);
 }
 
@@ -404,18 +452,18 @@
 .profile-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 12px;
     margin-top: 4px;
 }
 
 .profile-stat-card {
     background: var(--white);
-    border-radius: var(--radius-md);
+    border-radius: 14px;
     box-shadow: var(--shadow-sm);
-    padding: 24px 20px;
+    padding: 20px 16px;
     text-align: center;
     text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.2s;
     border: 2px solid transparent;
     display: block;
 }
@@ -427,70 +475,63 @@
 }
 
 .profile-stat-icon {
-    font-size: 32px;
-    margin-bottom: 10px;
+    font-size: 28px;
+    margin-bottom: 8px;
 }
 
 .profile-stat-label {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 4px;
+    color: var(--navy);
+    margin-bottom: 3px;
 }
 
 .profile-stat-desc {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-light);
 }
 
 /* =============================================
-   PROFILE LINKS (kept for compatibility)
+   PROFILE LINKS
    ============================================= */
 .profile-links {
     display: flex;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 8px;
     flex-wrap: wrap;
-}
-/* =============================================
-   FIELD ERROR MESSAGES
-   ============================================= */
-.field-error {
-    font-size: 12px;
-    color: var(--error);
-    margin-top: 4px;
-    min-height: 16px;
-    display: block;
+    margin-top: 12px;
 }
 
 /* =============================================
-   PASSWORD STRENGTH
+   RESPONSIVE
    ============================================= */
-.password-strength {
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 18px 16px;
+    }
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .profile-header-actions {
+        justify-content: center;
+        margin-left: 0;
+    }
+    .profile-form-row {
+        grid-template-columns: 1fr;
+    }
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
 }
 
-.strength-bar {
-    flex: 1;
-    height: 5px;
-    background: var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.strength-fill {
-    height: 100%;
-    width: 0%;
-    border-radius: 10px;
-    transition: width 0.3s, background-color 0.3s;
-}
-
-.strength-label {
-    font-size: 11px;
-    font-weight: 600;
-    min-width: 70px;
-    text-align: right;
+@media (max-width: 480px) {
+    .auth-wrapper {
+        padding: 8px;
+    }
+    .auth-card {
+        padding: 14px;
+    }
+    .auth-title {
+        font-size: 16px;
+    }
 }

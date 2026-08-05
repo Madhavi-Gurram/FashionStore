@@ -9,6 +9,7 @@
     <title>${product.name} - FashionStore</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/wishlist.css">
 </head>
 <body>
 
@@ -27,10 +28,10 @@
 
         <%-- ALERTS --%>
         <c:if test="${not empty error}">
-            <div class="alert alert-error">${error}</div>
+            <div class="alert alert-error">⚠️ ${error}</div>
         </c:if>
         <c:if test="${not empty success}">
-            <div class="alert alert-success">${success}</div>
+            <div class="alert alert-success">✅ ${success}</div>
         </c:if>
 
         <%-- PRODUCT DETAIL LAYOUT --%>
@@ -47,7 +48,7 @@
             <%-- RIGHT — INFO --%>
             <div class="product-detail-info">
 
-                <%-- Category --%>
+                <%-- CATEGORY --%>
                 <div class="product-detail-category">
                     <c:forEach var="cat" items="${categories}">
                         <c:if test="${cat.categoryId == product.categoryId}">
@@ -56,15 +57,34 @@
                     </c:forEach>
                 </div>
 
-                <%-- Name --%>
+                <%-- NAME --%>
                 <h1 class="product-detail-name">${product.name}</h1>
 
-                <%-- Price --%>
+                <%-- PRICE --%>
                 <div class="product-detail-price">
-                    ₹<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/>
+                    ₹<fmt:formatNumber value="${product.price}"
+                      pattern="#,##0.00"/>
                 </div>
 
-                <%-- Description --%>
+                <%-- WISHLIST BUTTON --%>
+                <c:if test="${not empty sessionScope.user}">
+                    <c:choose>
+                        <c:when test="${isInWishlist}">
+                            <a href="${pageContext.request.contextPath}/wishlist?action=remove&productId=${product.productId}&redirect=/FashionStore/products?action=detail%26id=${product.productId}"
+                               class="wishlist-toggle-btn active">
+                                ❤️ Remove from Wishlist
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/wishlist?action=add&productId=${product.productId}&redirect=/FashionStore/products?action=detail%26id=${product.productId}"
+                               class="wishlist-toggle-btn">
+                                🤍 Add to Wishlist
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+
+                <%-- DESCRIPTION --%>
                 <p class="product-detail-desc">${product.description}</p>
 
                 <%-- FORM --%>
@@ -78,16 +98,25 @@
                     <%-- SIZE SELECTOR --%>
                     <div class="size-label">Select Size:</div>
                     <div class="size-options">
-                        <c:forEach var="variant" items="${variants}">
-                            <button type="button"
-                                    class="size-btn ${variant.stock == 0 ? 'out-of-stock' : ''}"
-                                    data-variant-id="${variant.variantId}"
-                                    data-stock="${variant.stock}"
-                                    ${variant.stock == 0 ? 'disabled' : ''}
-                                    onclick="selectSize(this)">
-                                ${variant.size}
-                            </button>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${not empty variants}">
+                                <c:forEach var="variant" items="${variants}">
+                                    <button type="button"
+                                            class="size-btn ${variant.stock == 0 ? 'out-of-stock' : ''}"
+                                            data-variant-id="${variant.variantId}"
+                                            data-stock="${variant.stock}"
+                                            ${variant.stock == 0 ? 'disabled' : ''}
+                                            onclick="selectSize(this)">
+                                        ${variant.size}
+                                    </button>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <p style="color:var(--text-light);font-size:13px;">
+                                    No sizes available
+                                </p>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
 
                     <%-- STOCK INFO --%>
@@ -123,7 +152,12 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="${pageContext.request.contextPath}/user?action=loginPage"
-                                   class="btn-add-cart" style="text-align:center;">
+                                   class="btn-add-cart"
+                                   style="text-align:center;
+                                          text-decoration:none;
+                                          display:flex;
+                                          align-items:center;
+                                          justify-content:center;">
                                     Login to Add to Cart
                                 </a>
                             </c:otherwise>
@@ -145,7 +179,9 @@
         <%-- RELATED PRODUCTS --%>
         <c:if test="${not empty relatedProducts}">
             <div class="related-section">
-                <h2 class="section-title">You may also <span>like</span></h2>
+                <h2 class="section-title">
+                    You may also <span>like</span>
+                </h2>
                 <div class="related-grid">
                     <c:forEach var="related" items="${relatedProducts}">
                         <a href="${pageContext.request.contextPath}/products?action=detail&id=${related.productId}"
@@ -157,6 +193,13 @@
                                      onerror="this.src='${pageContext.request.contextPath}/assets/images/placeholder.jpg'"/>
                             </div>
                             <div class="product-card-body">
+                                <div class="product-card-category">
+                                    <c:forEach var="cat" items="${categories}">
+                                        <c:if test="${cat.categoryId == related.categoryId}">
+                                            ${cat.categoryName}
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
                                 <div class="product-card-name">${related.name}</div>
                                 <div class="product-card-price">
                                     ₹<fmt:formatNumber value="${related.price}"
@@ -181,13 +224,16 @@
                 b.classList.remove('selected');
             });
             btn.classList.add('selected');
-            document.getElementById('selectedVariantId').value = btn.dataset.variantId;
+            document.getElementById('selectedVariantId').value =
+                btn.dataset.variantId;
             currentStock = parseInt(btn.dataset.stock);
             const stockInfo = document.getElementById('stockInfo');
             if (currentStock > 10) {
-                stockInfo.innerHTML = '✅ <span>In Stock</span> (' + currentStock + ' available)';
+                stockInfo.innerHTML =
+                    '✅ <span>In Stock</span> (' + currentStock + ' available)';
             } else if (currentStock > 0) {
-                stockInfo.innerHTML = '⚠️ Only <span>' + currentStock + ' left</span> in stock!';
+                stockInfo.innerHTML =
+                    '⚠️ Only <span>' + currentStock + ' left</span> in stock!';
             } else {
                 stockInfo.innerHTML = '❌ Out of Stock';
             }
@@ -204,8 +250,10 @@
             document.getElementById('qtyInput').value = qty;
         }
 
-        document.getElementById('addToCartForm').addEventListener('submit', function(e) {
-            const variantId = document.getElementById('selectedVariantId').value;
+        document.getElementById('addToCartForm')
+                .addEventListener('submit', function(e) {
+            const variantId =
+                document.getElementById('selectedVariantId').value;
             if (!variantId) {
                 e.preventDefault();
                 alert('Please select a size before adding to cart!');

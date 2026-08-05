@@ -16,15 +16,19 @@ import java.util.List;
 
 public class OrderDAOImpl implements OrderDAO {
 
-    // Place new order
+    // =============================================
+    // PLACE NEW ORDER
+    // =============================================
     @Override
     public int placeOrder(Order order) {
         String sql = "INSERT INTO orders (user_id, total_amount, payment_method, " +
                      "order_status, delivery_name, delivery_phone, delivery_address, " +
-                     "delivery_city, delivery_state, delivery_pincode) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "delivery_city, delivery_state, delivery_pincode, " +
+                     "tracking_number, estimated_delivery) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = con.prepareStatement(sql,
+                     Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, order.getUserId());
             ps.setDouble(2, order.getTotalAmount());
@@ -36,10 +40,11 @@ public class OrderDAOImpl implements OrderDAO {
             ps.setString(8, order.getDeliveryCity());
             ps.setString(9, order.getDeliveryState());
             ps.setString(10, order.getDeliveryPincode());
+            ps.setString(11, order.getTrackingNumber());
+            ps.setString(12, order.getEstimatedDelivery());
 
             int rows = ps.executeUpdate();
             if (rows > 0) {
-                // Return generated order ID
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     return rs.getInt(1);
@@ -52,10 +57,13 @@ public class OrderDAOImpl implements OrderDAO {
         return -1;
     }
 
-    // Add items to order
+    // =============================================
+    // ADD ORDER ITEMS
+    // =============================================
     @Override
     public boolean addOrderItems(List<OrderItem> orderItems) {
-        String sql = "INSERT INTO order_items (order_id, product_id, variant_id, quantity, price) " +
+        String sql = "INSERT INTO order_items " +
+                     "(order_id, product_id, variant_id, quantity, price) " +
                      "VALUES (?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -78,7 +86,9 @@ public class OrderDAOImpl implements OrderDAO {
         return false;
     }
 
-    // Get order by ID
+    // =============================================
+    // GET ORDER BY ID
+    // =============================================
     @Override
     public Order getOrderById(int orderId) {
         String sql = "SELECT * FROM orders WHERE order_id = ?";
@@ -97,11 +107,14 @@ public class OrderDAOImpl implements OrderDAO {
         return null;
     }
 
-    // Get all orders of a user
+    // =============================================
+    // GET ALL ORDERS OF A USER
+    // =============================================
     @Override
     public List<Order> getOrdersByUserId(int userId) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+        String sql = "SELECT * FROM orders WHERE user_id = ? " +
+                     "ORDER BY order_date DESC";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -117,7 +130,9 @@ public class OrderDAOImpl implements OrderDAO {
         return orders;
     }
 
-    // Get all items of an order
+    // =============================================
+    // GET ALL ITEMS OF AN ORDER
+    // =============================================
     @Override
     public List<OrderItem> getOrderItems(int orderId) {
         List<OrderItem> orderItems = new ArrayList<>();
@@ -137,15 +152,27 @@ public class OrderDAOImpl implements OrderDAO {
         return orderItems;
     }
 
-    // Update order status
+    // =============================================
+    // UPDATE ORDER STATUS + TIMESTAMPS
+    // =============================================
     @Override
     public boolean updateOrderStatus(int orderId, String status) {
-        String sql = "UPDATE orders SET order_status = ? WHERE order_id = ?";
+        String sql = "UPDATE orders SET order_status = ?, " +
+                     "processing_at = CASE WHEN ? = 'Processing' " +
+                     "  THEN NOW() ELSE processing_at END, " +
+                     "shipped_at = CASE WHEN ? = 'Shipped' " +
+                     "  THEN NOW() ELSE shipped_at END, " +
+                     "delivered_at = CASE WHEN ? = 'Delivered' " +
+                     "  THEN NOW() ELSE delivered_at END " +
+                     "WHERE order_id = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, status);
-            ps.setInt(2, orderId);
+            ps.setString(2, status);
+            ps.setString(3, status);
+            ps.setString(4, status);
+            ps.setInt(5, orderId);
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -154,7 +181,29 @@ public class OrderDAOImpl implements OrderDAO {
         return false;
     }
 
-    // Helper method to map ResultSet to Order object
+    // =============================================
+    // UPDATE TRACKING NUMBER
+    // =============================================
+    @Override
+    public boolean updateTrackingNumber(int orderId, String trackingNumber) {
+        String sql = "UPDATE orders SET tracking_number = ? " +
+                     "WHERE order_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, trackingNumber);
+            ps.setInt(2, orderId);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error updating tracking number: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // =============================================
+    // HELPER METHODS
+    // =============================================
     private Order mapOrder(ResultSet rs) throws SQLException {
         Order order = new Order();
         order.setOrderId(rs.getInt("order_id"));
@@ -169,10 +218,15 @@ public class OrderDAOImpl implements OrderDAO {
         order.setDeliveryCity(rs.getString("delivery_city"));
         order.setDeliveryState(rs.getString("delivery_state"));
         order.setDeliveryPincode(rs.getString("delivery_pincode"));
+        order.setTrackingNumber(rs.getString("tracking_number"));
+        order.setEstimatedDelivery(rs.getString("estimated_delivery"));
+        order.setPlacedAt(rs.getString("placed_at"));
+        order.setProcessingAt(rs.getString("processing_at"));
+        order.setShippedAt(rs.getString("shipped_at"));
+        order.setDeliveredAt(rs.getString("delivered_at"));
         return order;
     }
 
-    // Helper method to map ResultSet to OrderItem object
     private OrderItem mapOrderItem(ResultSet rs) throws SQLException {
         OrderItem orderItem = new OrderItem();
         orderItem.setOrderItemId(rs.getInt("order_item_id"));
